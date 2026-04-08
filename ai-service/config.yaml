@@ -1,0 +1,67 @@
+# MindBot AI Service Configuration
+# Edit this file to change models, parameters, and feature settings.
+# No code changes required for typical configuration.
+
+llm:
+  # OpenRouter API key is read from the .env file (OPENROUTER_API_KEY)
+  base_url: "https://openrouter.ai/api/v1"
+
+  # Model used for general conversation and most tasks
+  default_model: "openai/gpt-oss-20b:free"
+
+  # Model used for trivial tool tasks (search queries, calculations routing)
+  light_model: "openai/gpt-oss-20b:free"
+
+  # Model used for complex reasoning and multi-step agent planning
+  heavy_model: "qwen/qwen3.6-plus:free"
+
+  # Model used for vision tasks (image analysis, document OCR)
+  vision_model: "openrouter/free"
+  #   vision_model: "meta-llama/llama-3.2-11b-vision-instruct:free"
+
+  # Default generation parameters
+  temperature: 0.7
+  max_tokens: 2048
+
+agent:
+  # Maximum number of reasoning/tool-call loops before the agent stops
+  max_iterations: 10
+
+  # System prompt for the MindBot assistant
+  system_prompt: |
+    You are MindBot, an intelligent multi-modal AI assistant with access to various tools.
+    You can search the web, perform calculations, run Python code, check calendar events,
+    and answer questions from uploaded documents.
+    Be concise, helpful, and accurate. Always indicate when you are using a tool.
+
+rag:
+  # Text chunking settings for document ingestion
+  chunk_size: 1000
+  chunk_overlap: 200
+
+  # Number of top documents to retrieve per query
+  top_k: 4
+
+  # Directory where FAISS indexes are stored
+  index_path: "./data/faiss_index"
+
+memory:
+  max_messages: 5
+
+tools:
+  web_search:
+    enabled: true
+    max_results: 5
+
+  calculator:
+    enabled: true
+
+  python_repl:
+    enabled: true
+    # WARNING: Only enable in trusted/local environments
+    safe_mode: false
+
+  calendar:
+    enabled: true
+    # Path for the mock calendar JSON store
+    data_path: "./data/calendar.json"
